@@ -6,10 +6,6 @@ class Model {
     this.url = "https://pixel-node-back.herokuapp.com/"
     this.socket = io.connect(this.url)
 
-
-    // fetch(url)
-    //   .then(res => res.json())
-    //   .then(data => this.pixels = data)
   }
 
   _commit() {
@@ -23,12 +19,14 @@ class Model {
       this.onPixelsReady(this.pixels)
     })
 
-
-
     // fetch(this.url)
     //   .then(res => res.json())
     //   .then(data => this.callbackAns(data))
       
+  }
+
+  colorChange() {
+    
   }
 
   changePixelColor(id, color) {
@@ -36,46 +34,18 @@ class Model {
     console.log(color)
     color = color.substr(1)
 
-    // var json_data = {
-    //   color: color
-    // }
-
-    // var data = {"color" : color}
-    // var xmlhttp = new XMLHttpRequest()
-    // xmlhttp.open("PUT", this.url + '/' + id, true)
-    // xmlhttp.send( JSON.stringify( data ) )
-
-    
-    // fetch(this.url + '/' + id + '/' + color)
-    //   .then(res => this._commit())
-
     this.socket.emit('change color', {id: id, color: color})
+
     // this._commit
 
-    // $.ajax({  
-    //   url: this.url + '/' + id,
-    //   type: 'PUT',  
-    //   dataType: 'json',  
-    //   data: data,
-    //   success: function (data, textStatus, xhr) {  
-    //       console.log(data);  
+  }
 
-    //   },  
-    //   error: function (xhr, textStatus, errorThrown) {  
-    //       console.log('Error in Operation');  
-
-    //   }  
-    // });  
-
-    // var xmlHttp = createCORSRequest('PUT', this.url + '/' + id + '/');
-    // var xmlHttp = new XMLHttpRequest()
-
-    // var mimeType = "application/json"
-    // xmlHttp.open('POST', this.url + '/' + id + '/', true)
-    // xmlHttp.setRequestHeader('Content-Type', mimeType)
-    // xmlHttp.send(data)
-
-
+  pixelModelColorChange(callback) {
+    // this.colorChange()
+    this.socket.on('color changed', (data) => {
+      callback(data[0].id, data[0].color)
+    })
+    // this.onPixelColorChangeReady = callback
   }
 
   bindOnPixelsReady(callback) {
@@ -110,8 +80,8 @@ class View {
       td.style.backgroundColor = pixels[i].color
 
       var span = this.createElement('span')
-      span.style.width = "10px"
-      span.style.height = "10px"
+      span.style.width = '10px'
+      span.style.height = '10px'
       td.append(span)
 
       tr.append(td);
@@ -127,9 +97,10 @@ class View {
 
   }
 
-  // cellClick(event) {
-  //   console.log(event.currentTarget.id)
-  // }
+  pixelColorChange(id, color) {
+    var pixel = document.getElementById(id)
+    pixel.style.backgroundColor = color
+  }
 
   // bindChangePixelColor(handler) {
 
@@ -169,7 +140,7 @@ class Controller {
 
 
     //Display Canvas
-    this.model.bindOnPixelsReady(this.onCanvasChanged.bind(this))
+    this.model.bindOnPixelsReady(this.onCanvasChangedHandler.bind(this))
     this.model.getPixels()
 
     this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
@@ -179,9 +150,10 @@ class Controller {
 
   tableReadyHandler() {
     this.view.bindHandlers(this.colorChangedHandler)
+    this.model.pixelModelColorChange(this.colorViewChangeHandler)
   }
 
-  onCanvasChanged = (pixels) => {
+  onCanvasChangedHandler = (pixels) => {
     this.view.displayCanvas(pixels)
   }
 
@@ -189,7 +161,9 @@ class Controller {
     this.model.changePixelColor(id, color)
   }
 
-
+  colorViewChangeHandler = (id, color) => {
+    this.view.pixelColorChange(id, color)
+  }
 }
 
 
