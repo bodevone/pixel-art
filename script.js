@@ -2,8 +2,8 @@ class Model {
   constructor() {
     this.pixels
     // this.url = "https://pixel-art-back.herokuapp.com/pixels"
-    // this.url = "http://localhost:4000"
-    this.url = "https://pixel-node-back.herokuapp.com/"
+    this.url = "http://localhost:4000"
+    // this.url = "https://pixel-node-back.herokuapp.com/"
     this.socket = io.connect(this.url)
 
 
@@ -18,6 +18,7 @@ class Model {
 
   getPixels() {
     this.socket.on('pixels', (data) => {
+      console.log(data)
       this.pixels = data
       this.onPixelsReady(this.pixels)
     })
@@ -180,7 +181,7 @@ class Controller {
     this.view.bindHandlers(this.colorChangedHandler)
   }
 
-  onCanvasChanged = pixels => {
+  onCanvasChanged = (pixels) => {
     this.view.displayCanvas(pixels)
   }
 
@@ -192,8 +193,7 @@ class Controller {
 }
 
 
-function init() {
-  
+function init() {  
   const app = new Controller(new View(), new Model())
 }
 
