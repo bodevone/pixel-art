@@ -2,8 +2,8 @@ class Model {
   constructor() {
     this.pixels
     // this.url = "https://pixel-art-back.herokuapp.com/pixels"
-    // this.url = "http://localhost:4000"
-    this.url = "https://pixel-node-back.herokuapp.com/"
+    this.url = "http://localhost:4000"
+    // this.url = "https://pixel-node-back.herokuapp.com/"
     this.socket = io.connect(this.url)
 
   }
@@ -25,10 +25,6 @@ class Model {
       
   }
 
-  colorChange() {
-    
-  }
-
   changePixelColor(id, color) {
     console.log(id)
     console.log(color)
@@ -48,6 +44,12 @@ class Model {
     // this.onPixelColorChangeReady = callback
   }
 
+  getUserNumber(callback) {
+    this.socket.on('user count', (data) => {
+      callback(data)
+    })
+  }
+
   bindOnPixelsReady(callback) {
     this.onPixelsReady = callback
   }
@@ -56,8 +58,8 @@ class Model {
 class View {
   constructor() {
     this.colorPicker = this.getElement('#colorPicker')
-    this.pixelCanvas = this.getElement('#pixelCanvas')
-    this.root = this.getElement('#root')
+    // this.pixelCanvas = this.getElement('#pixelCanvas')
+    this.canvas = this.getElement('#canvas')
     this.table
   }
 
@@ -89,8 +91,8 @@ class View {
       if (pixels[i].column == 19) {
         this.table.append(tr)
       }
-      this.root.innerHTML = ''
-      this.root.append(this.table)
+      // this.canvas.innerHTML = ''
+      this.canvas.append(this.table)
     }
 
     this.onTableReady();
@@ -107,7 +109,7 @@ class View {
   // }
 
   bindHandlers(handler) {
-    var cells = document.querySelectorAll("td");
+    var cells = document.querySelectorAll('td');
     // console.log(this.table)
 
     cells.forEach(cell => cell.addEventListener('click', event => {
@@ -116,6 +118,11 @@ class View {
       handler(event.currentTarget.id, this.colorPicker.value)
 
     }))   
+  }
+
+  showUserCount(userNum) {
+    var text = this.getElement('#userCount')
+    text.textContent = userNum
   }
 
   createElement(tag, className) {
@@ -146,6 +153,9 @@ class Controller {
     this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
     // this.view.bindChangePixelColor(this.handleChangePixelColor)
 
+    //Display User Number
+    this.model.getUserNumber(this.userCountHandler)
+
   }
 
   tableReadyHandler() {
@@ -164,6 +174,12 @@ class Controller {
   colorViewChangeHandler = (id, color) => {
     this.view.pixelColorChange(id, color)
   }
+
+  userCountHandler = (num) => {
+    this.view.showUserCount(num)
+  }
+
+
 }
 
 
