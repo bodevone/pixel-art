@@ -91,7 +91,7 @@ class View {
       if (pixels[i].column == 19) {
         this.table.append(tr)
       }
-      // this.canvas.innerHTML = ''
+      this.canvas.innerHTML = ''
       this.canvas.append(this.table)
     }
 
