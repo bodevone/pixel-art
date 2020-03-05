@@ -14,7 +14,6 @@ class Model {
 
   getPixels() {
     this.socket.on('pixels', (data) => {
-      console.log(data)
       this.pixels = data
       this.onPixelsReady(this.pixels)
     })
@@ -58,14 +57,254 @@ class Model {
 class View {
   constructor() {
     this.colorPicker = this.getElement('#colorPicker')
-    // this.pixelCanvas = this.getElement('#pixelCanvas')
+
+    this.container = this.getElement('#container')
+    this.content = this.getElement('#content')
+    this.context = this.content.getContext('2d')
+
+    this.pixelCanvas = this.getElement('#pixelCanvas')
     this.canvas = this.getElement('#canvas')
     this.table
+
+    this.cellWidth = 100
+    this.cellHeight = 100
+    this.contentWidth = 2000
+    this.contentHeight = 2000
+    this.clientWidth = 0
+    this.clientHeight = 0
+    this.scroller
+    this.zoom
+    this.tileWidth
+    this.tileHeight
+    this.left
+    this.top
+    this.rows
+    this.col
+
+    // this.data
   }
 
   bindOnTableReady(callback){
     this.onTableReady = callback
   }
+
+  initScroller() {
+    this.scroller = new Scroller(this.canvasRender.bind(this), {
+      zooming: true,
+      locking: false
+    })
+
+    var rect = this.container.getBoundingClientRect();
+    this.scroller.setPosition(rect.left + this.container.clientLeft, rect.top + this.container.clientTop);
+
+  }
+
+  // dataInit(data) {
+  //   this.data = data
+  // }
+
+  reflow() {
+    this.clientWidth = this.container.clientWidth
+    this.clientHeight = this.container.clientHeight
+    this.scroller.setDimensions(this.clientWidth, this.clientHeight, this.contentWidth, this.contentHeight)
+  }
+
+  listeners() {
+    self = this
+    window.addEventListener("resize", this.reflow.bind(this), false);
+
+    if ('ontouchstart' in window) {
+
+      this.container.addEventListener("touchstart", function(e) {
+        // Don't react if initial down happens on a form element
+        if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
+          return;
+        }
+
+        self.scroller.doTouchStart(e.touches, e.timeStamp);
+        e.preventDefault();
+      }, false);
+
+      document.addEventListener("touchmove", function(e) {
+        self.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+      }, false);
+
+      document.addEventListener("touchend", function(e) {
+        self.scroller.doTouchEnd(e.timeStamp);
+      }, false);
+
+      document.addEventListener("touchcancel", function(e) {
+        self.scroller.doTouchEnd(e.timeStamp);
+      }, false);
+
+    } else {
+
+      var mousedown = false;
+
+      this.container.addEventListener("mousedown", function(e) {
+
+        if (e.target.tagName.match(/input|textarea|select/i)) {
+          return;
+        }
+        
+        self.scroller.doTouchStart([{
+          pageX: e.pageX,
+          pageY: e.pageY
+        }], e.timeStamp);
+
+        mousedown = true;
+      }, false);
+
+      document.addEventListener("mousemove", function(e) {
+
+        if (!mousedown) {
+          return;
+        }
+        
+        self.scroller.doTouchMove([{
+          pageX: e.pageX,
+          pageY: e.pageY
+        }], e.timeStamp);
+
+        mousedown = true;
+      }, false);
+
+      document.addEventListener("mouseup", function(e) {
+        if (!mousedown) {
+          return;
+        }
+        
+        self.scroller.doTouchEnd(e.timeStamp);
+
+        mousedown = false;
+      }, false);
+
+      this.container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
+        self.scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
+      }, false);
+
+    }
+  }
+
+  canvasRender(left, top, zoom) {
+    this.zoom = zoom
+    this.left = left
+    this.top = top
+
+    this.content.width = this.clientWidth
+    this.content.height = this.clientHeight
+
+    this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
+
+    this.tilingRender()
+
+  }
+
+  tilingRender() {
+
+    // Respect zooming
+    this.tileHeight = this.cellHeight * this.zoom;
+    this.tileWidth = this.cellWidth * this.zoom;
+
+    console.log(this.zoom, this.top, this.left)
+    
+
+    // Compute starting rows/columns and support out of range scroll positions
+    var startRow = Math.max(Math.floor(this.top / this.tileHeight), 0);
+    var startCol = Math.max(Math.floor(this.left / this.tileWidth), 0);
+
+    // Compute maximum rows/columns to render for content size
+    var maxRows = (this.contentHeight * this.zoom) / this.tileHeight;
+    var maxCols = (this.contentWidth * this.zoom) / this.tileWidth;
+
+
+    this.rows = maxRows
+    this.cols = maxCols
+    // Compute initial render offsets
+    // 1. Positive scroll position: We match the starting rows/tile first so we
+    //    just need to take care that the half-visible tile is fully rendered
+    //    and placed partly outside.
+    // 2. Negative scroll position: We shift the whole render context
+    //    (ignoring the tile dimensions) and effectively reduce the render
+    //    dimensions by the scroll amount.
+    var startTop = this.top >= 0 ? -this.top % this.tileHeight : -this.top;
+    var startLeft = this.left >= 0 ? -this.left % this.tileWidth : -this.left;
+
+
+    // Compute number of rows to render
+    var rows = Math.floor(this.clientHeight / this.tileHeight);
+
+    if ((this.top % this.tileHeight) > 0) {
+      rows += 1;
+    }
+
+    if ((startTop + (rows * this.tileHeight)) < this.clientHeight) {
+      rows += 1;
+    }
+
+    // Compute number of columns to render
+    var cols = Math.floor(this.clientWidth / this.tileWidth);
+
+    if ((this.left % this.tileWidth) > 0) {
+      cols += 1;
+    }
+
+    if ((startLeft + (cols * this.tileWidth)) < this.clientWidth) {
+      cols += 1;
+    }
+
+    // Limit rows/columns to maximum numbers
+    rows = Math.min(rows, maxRows - startRow);
+    cols = Math.min(cols, maxCols - startCol);
+
+
+    // Initialize looping variables
+    var currentTop = startTop;
+    var currentLeft = startLeft;
+
+    // Render new squares
+    for (var row = startRow; row < (rows + startRow); row++) {
+      for (var col = startCol; col < (cols + startCol); col++) {
+        this.paintCell(row, col, currentLeft, currentTop, this.tileWidth, this.tileHeight)
+        currentLeft += this.tileWidth;
+      }
+
+      currentLeft = startLeft;
+      currentTop += this.tileHeight;
+    }
+
+    this.content.addEventListener('click', (e) => {
+      var x = e.offsetX + this.left
+      var y = e.offsetY + this.top
+
+      var row = (x / this.tileWidth) >> 0
+      var col = (y / this.tileHeight) >> 0
+
+    })
+  }
+
+  paintCell(row, col, left, top, width, height) {
+
+    // var i = row * this.rows + col
+    this.context.strokeRect(left, top, width, height);
+    this.context.fillStyle = "#666"
+    // this.context.fillStyle = "#" + this.data[i].color
+    this.context.fillRect(left, top, width, height)
+		
+		this.context.fillStyle = "black";
+		this.context.font = (14 * this.zoom).toFixed(2) + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
+		
+		// Pretty primitive text positioning :)
+		this.context.fillText(row + "," + col, left + (6 * this.zoom), top + (18 * this.zoom));
+    
+    
+  }
+
+  // canvasEventListener() {
+  //   this.content.addEventListener('click', (e) => {
+  //     console.log(e)
+  //   })
+  // }
 
   displayCanvas(pixels) {
 
@@ -145,16 +384,21 @@ class Controller {
     this.view = view
     this.model = model
 
+    //Canvas Zoom Pan
+    this.view.initScroller()
+    this.view.reflow()
+    this.view.listeners()
+
 
     //Display Canvas
     this.model.bindOnPixelsReady(this.onCanvasChangedHandler.bind(this))
     this.model.getPixels()
 
-    this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
+    // this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
     // this.view.bindChangePixelColor(this.handleChangePixelColor)
 
     //Display User Number
-    this.model.getUserNumber(this.userCountHandler)
+    // this.model.getUserNumber(this.userCountHandler)
 
   }
 
@@ -164,7 +408,11 @@ class Controller {
   }
 
   onCanvasChangedHandler = (pixels) => {
-    this.view.displayCanvas(pixels)
+    // this.view.dataInit(pixels)
+    // this.view.reflow()
+    // this.view.listeners()
+
+    // this.view.displayCanvas(pixels)
   }
 
   colorChangedHandler = (id, color) => {
@@ -178,7 +426,6 @@ class Controller {
   userCountHandler = (num) => {
     this.view.showUserCount(num)
   }
-
 
 }
 

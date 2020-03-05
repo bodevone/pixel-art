@@ -9,22 +9,31 @@
     <!-- <script src="/socket.io/socket.io.js"></script> -->
     <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
     <script src="script.js"></script>
+    <script src="Scroller.js"></script>
+    <script src="Animate.js"></script>
+
+
 </head>
 <body>
-    <h1>Pixel Art</h1>
+    <!-- <h1>Pixel Art</h1>
     
 
     <h3>Pick A Color</h3>
-    <input type="color" id="colorPicker" value="#02b3e4">
+    <input type="color" id="colorPicker" value="#02b3e4"> -->
 
-    <div id = "root">
+	<div id="container">
+		<canvas id="content"></canvas>
+    </div>
+    
+    <!-- <div id = "root">
         <p>Number of Live Users: <span id="userCount" style="font-weight: bold"></span></p>
 
         <div id = "canvas">
         </div>
     
-    </div>
+    </div> -->
 
 </body>
 </html>
