@@ -126,6 +126,7 @@ class View {
       }, false);
 
       document.addEventListener("touchmove", function(e) {
+
         self.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
       }, false);
 
@@ -140,6 +141,7 @@ class View {
     } else {
 
       var mousedown = false;
+      var mousemove = false;
 
       this.container.addEventListener("mousedown", function(e) {
 
@@ -160,23 +162,37 @@ class View {
         if (!mousedown) {
           return;
         }
-        
+
         self.scroller.doTouchMove([{
           pageX: e.pageX,
           pageY: e.pageY
         }], e.timeStamp);
 
         mousedown = true;
+        mousemove = true;
       }, false);
 
       document.addEventListener("mouseup", function(e) {
         if (!mousedown) {
           return;
         }
-        
+
+        if (!mousemove) {
+          var x = e.offsetX + self.left
+          var y = e.offsetY + self.top
+
+          var col = (x / self.tileWidth) >> 0
+          var row = (y / self.tileHeight) >> 0
+    
+          console.log("Row: "+ row + " Col: " + col)
+    
+          //Change color HERE
+        }
+
         self.scroller.doTouchEnd(e.timeStamp);
 
         mousedown = false;
+        mousemove = false;
       }, false);
 
       this.container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
@@ -206,9 +222,8 @@ class View {
     this.tileHeight = this.cellHeight * this.zoom;
     this.tileWidth = this.cellWidth * this.zoom;
 
-    console.log(this.zoom, this.top, this.left)
+    // console.log(this.zoom, this.top, this.left)
     
-
     // Compute starting rows/columns and support out of range scroll positions
     var startRow = Math.max(Math.floor(this.top / this.tileHeight), 0);
     var startCol = Math.max(Math.floor(this.left / this.tileWidth), 0);
@@ -273,14 +288,9 @@ class View {
       currentTop += this.tileHeight;
     }
 
-    this.content.addEventListener('click', (e) => {
-      var x = e.offsetX + this.left
-      var y = e.offsetY + this.top
-
-      var row = (x / this.tileWidth) >> 0
-      var col = (y / this.tileHeight) >> 0
-
-    })
+    // this.content.addEventListener('click', (e) => {
+      
+    // })
   }
 
   paintCell(row, col, left, top, width, height) {
