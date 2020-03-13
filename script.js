@@ -530,8 +530,12 @@ class View {
   }
 
   showUserCount(userNum) {
-    var text = this.getElement('#userCount')
+    console.log("USERS: " + userNum)
+    var text = this.getElement('#usersNumText')
     text.textContent = userNum
+    text.style.color = ""
+    // var text = this.getElement('#userCount')
+    // text.textContent = userNum
   }
 
   createElement(tag, className) {
@@ -568,7 +572,7 @@ class Controller {
     // this.view.bindChangePixelColor(this.handleChangePixelColor)
 
     //Display User Number
-    // this.model.getUserNumber(this.userCountHandler)
+    this.model.getUserNumber(this.userCountHandler)
 
   }
 
