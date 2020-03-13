@@ -533,7 +533,6 @@ class View {
     console.log("USERS: " + userNum)
     var text = this.getElement('#usersNumText')
     text.textContent = userNum
-    text.style.color = ""
     // var text = this.getElement('#userCount')
     // text.textContent = userNum
   }
