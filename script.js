@@ -1,9 +1,7 @@
 class Model {
   constructor() {
-    this.pixels
-    // this.url = "https://pixel-art-back.herokuapp.com/pixels"
-    // this.url = "http://localhost:4000"
-    this.url = "https://pixel-node-back.herokuapp.com/"
+    this.url = "http://localhost:4000"
+    // this.url = "https://pixel-node-back.herokuapp.com/"
     this.socket = io.connect(this.url)
 
   }
@@ -14,8 +12,7 @@ class Model {
 
   getPixels() {
     this.socket.on('pixels', (data) => {
-      this.pixels = data
-      this.onPixelsReady(this.pixels)
+      this.onPixelsReady(data)
     })
 
     // fetch(this.url)
@@ -27,9 +24,11 @@ class Model {
   changePixelColor(id, color) {
     console.log(id)
     console.log(color)
-    color = color.substr(1)
+    // color = color.substr(1)
+    var data = {}
+    data[id] = color
 
-    this.socket.emit('change color', {id: id, color: color})
+    this.socket.emit('change color', data)
 
     // this._commit
 
@@ -37,8 +36,10 @@ class Model {
 
   pixelModelColorChange(callback) {
     // this.colorChange()
+    console.log("HERE")
     this.socket.on('color changed', (data) => {
-      callback(data[0].id, data[0].color)
+      console.log(data)
+      callback(data)
     })
     // this.onPixelColorChangeReady = callback
   }
@@ -66,12 +67,14 @@ class View {
     this.canvas = this.getElement('#canvas')
     this.table
 
+    this.colorCallback
+
     this.cellWidth = 100
     this.cellHeight = 100
-    this.contentWidth = 2000
-    this.contentHeight = 2000
-    this.clientWidth = 0
-    this.clientHeight = 0
+    this.contentWidth
+    this.contentHeight
+    this.clientWidth
+    this.clientHeight
     this.scroller
     this.zoom
     this.tileWidth
@@ -81,6 +84,9 @@ class View {
     this.rows
     this.col
 
+    this.color
+    this.prevColorElement
+
     // this.data
   }
 
@@ -88,11 +94,24 @@ class View {
     this.onTableReady = callback
   }
 
-  initScroller() {
+  bindColorChange(callback) {
+    this.colorCallback = callback
+  }
+
+  initScroller(pixels) {
+    var rows = pixels.maxRow
+    var cols = pixels.maxCol
+
+    this.contentHeight = this.cellHeight * rows
+    this.contentWidth = this.cellWidth * cols
+
+    delete pixels.maxRow
+    delete pixels.maxCol
+
     this.scroller = new Scroller(this.canvasRender.bind(this), {
       zooming: true,
       locking: false
-    })
+    }, pixels)
 
     var rect = this.container.getBoundingClientRect();
     this.scroller.setPosition(rect.left + this.container.clientLeft, rect.top + this.container.clientTop);
@@ -102,6 +121,144 @@ class View {
   // dataInit(data) {
   //   this.data = data
   // }
+
+  initColor() {
+    this.color = "222222"
+    console.log(this.color)
+    var color4 = document.getElementById("4")
+    this.makeCurrColor(color4)
+
+  }
+
+  colorListeners() {
+    var color1 = document.getElementById("1")
+    color1.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color1)
+      this.color = "FFFFFF"
+    })
+
+    var color2 = document.getElementById("2")
+    color2.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color2)
+      this.color = "E4E4E4"
+    })
+
+    var color3 = document.getElementById("3")
+    color3.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color3)
+      this.color = "88888"
+    })
+
+    var color4 = document.getElementById("4")
+    color4.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color4)
+      this.color = "222222"
+    })
+
+    var color5 = document.getElementById("5")
+    color5.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color5)
+      this.color = "FFA7D1"
+    })
+
+    var color6 = document.getElementById("6")
+    color6.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color6)
+      this.color = "E50000"
+    })
+
+    var color7 = document.getElementById("7")
+    color7.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color7)
+      this.color = "E59500"
+    })
+
+    var color8 = document.getElementById("8")
+    color8.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color8)
+      this.color = "A06A42"
+    })
+
+    var color9 = document.getElementById("9")
+    color9.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color9)
+      this.color = "E5D900"
+    })
+
+    var color10 = document.getElementById("10")
+    color10.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color10)
+      this.color = "94E044"
+    })
+
+    var color11 = document.getElementById("11")
+    color11.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color11)
+      this.color = "02BE01"
+    })
+
+    var color12 = document.getElementById("12")
+    color12.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color12)
+      this.color = "00D3DD"
+    })
+
+    var color13 = document.getElementById("13")
+    color13.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color13)
+      this.color = "0083C7"
+    })
+
+    var color14 = document.getElementById("14")
+    color14.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color14)
+      this.color = "0000EA"
+    })
+
+    var color15 = document.getElementById("15")
+    color15.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color15)
+      this.color = "CF6EE4"
+    })
+
+    var color16 = document.getElementById("16")
+    color16.addEventListener("click", () => {
+      this.cleanPrevColor()
+      this.makeCurrColor(color16)
+      this.color = "820080"
+    })
+  }
+
+  makeCurrColor(colorElement) {
+    colorElement.style.zIndex = "2"
+    colorElement.style.outline = "2px solid #fff"
+    colorElement.style.boxShadow = "0 0 5px 2px rgba(0, 0, 0, 0.25)"
+    
+    this.prevColorElement = colorElement
+  }
+
+  cleanPrevColor() {
+    if (this.prevColorElement) {
+      this.prevColorElement.style.zIndex = ""
+      this.prevColorElement.style.outline = ""
+      this.prevColorElement.style.boxShadow = ""
+    }
+  }
 
   reflow() {
     this.clientWidth = this.container.clientWidth
@@ -187,6 +344,10 @@ class View {
           console.log("Row: "+ row + " Col: " + col)
     
           //Change color HERE
+          const index = row + "_" + col
+
+          self.colorCallback(index, self.color)
+
         }
 
         self.scroller.doTouchEnd(e.timeStamp);
@@ -202,7 +363,7 @@ class View {
     }
   }
 
-  canvasRender(left, top, zoom) {
+  canvasRender(left, top, zoom, data) {
     this.zoom = zoom
     this.left = left
     this.top = top
@@ -212,17 +373,17 @@ class View {
 
     this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
 
-    this.tilingRender()
+    this.tilingRender(data)
 
   }
 
-  tilingRender() {
+  tilingRender(data) {
 
     // Respect zooming
     this.tileHeight = this.cellHeight * this.zoom;
     this.tileWidth = this.cellWidth * this.zoom;
 
-    // console.log(this.zoom, this.top, this.left)
+    console.log(this.zoom, this.top, this.left)
     
     // Compute starting rows/columns and support out of range scroll positions
     var startRow = Math.max(Math.floor(this.top / this.tileHeight), 0);
@@ -280,7 +441,12 @@ class View {
     // Render new squares
     for (var row = startRow; row < (rows + startRow); row++) {
       for (var col = startCol; col < (cols + startCol); col++) {
-        this.paintCell(row, col, currentLeft, currentTop, this.tileWidth, this.tileHeight)
+        const index = row + "_" + col
+        var color = "fff"
+        if (data.hasOwnProperty(index)) {
+          color = data[index]
+        }
+        this.paintCell(currentLeft, currentTop, this.tileWidth, this.tileHeight, color)
         currentLeft += this.tileWidth;
       }
 
@@ -288,33 +454,26 @@ class View {
       currentTop += this.tileHeight;
     }
 
-    // this.content.addEventListener('click', (e) => {
-      
-    // })
+    // this.onTableReady()
+
   }
 
-  paintCell(row, col, left, top, width, height) {
+  paintCell(left, top, width, height, color) {
 
     // var i = row * this.rows + col
     this.context.strokeRect(left, top, width, height);
-    this.context.fillStyle = "#666"
+    this.context.fillStyle = "#" + color
     // this.context.fillStyle = "#" + this.data[i].color
     this.context.fillRect(left, top, width, height)
 		
 		this.context.fillStyle = "black";
-		this.context.font = (14 * this.zoom).toFixed(2) + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
+		// this.context.font = (14 * this.zoom).toFixed(2) + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
 		
 		// Pretty primitive text positioning :)
-		this.context.fillText(row + "," + col, left + (6 * this.zoom), top + (18 * this.zoom));
+		// this.context.fillText(row + "," + col, left + (6 * this.zoom), top + (18 * this.zoom));
     
     
   }
-
-  // canvasEventListener() {
-  //   this.content.addEventListener('click', (e) => {
-  //     console.log(e)
-  //   })
-  // }
 
   displayCanvas(pixels) {
 
@@ -344,13 +503,14 @@ class View {
       this.canvas.append(this.table)
     }
 
-    this.onTableReady();
+    this.onTableReady()
 
   }
 
-  pixelColorChange(id, color) {
-    var pixel = document.getElementById(id)
-    pixel.style.backgroundColor = color
+  pixelColorChange(data) {
+    this.scroller.changeData(data)
+    // var pixel = document.getElementById(id)
+    // pixel.style.backgroundColor = color
   }
 
   // bindChangePixelColor(handler) {
@@ -393,16 +553,16 @@ class Controller {
   constructor(view, model) {
     this.view = view
     this.model = model
-
-    //Canvas Zoom Pan
-    this.view.initScroller()
-    this.view.reflow()
-    this.view.listeners()
-
-
+    
+    this.view.initColor()
+    this.view.colorListeners()
     //Display Canvas
     this.model.bindOnPixelsReady(this.onCanvasChangedHandler.bind(this))
+    this.view.bindColorChange(this.colorChangeCallback.bind(this))
     this.model.getPixels()
+
+    this.model.pixelModelColorChange(this.colorViewChangeHandler)
+
 
     // this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
     // this.view.bindChangePixelColor(this.handleChangePixelColor)
@@ -413,14 +573,19 @@ class Controller {
   }
 
   tableReadyHandler() {
-    this.view.bindHandlers(this.colorChangedHandler)
-    this.model.pixelModelColorChange(this.colorViewChangeHandler)
+    this.view.listeners()
+    // this.view.bindHandlers(this.colorChangedHandler)
+  }
+
+  colorChangeCallback = (id, color) => {
+    this.model.changePixelColor(id, color)
   }
 
   onCanvasChangedHandler = (pixels) => {
-    // this.view.dataInit(pixels)
-    // this.view.reflow()
-    // this.view.listeners()
+    //Canvas Zoom Pan
+    this.view.initScroller(pixels)
+    this.view.reflow()
+    this.view.listeners()
 
     // this.view.displayCanvas(pixels)
   }
@@ -429,8 +594,8 @@ class Controller {
     this.model.changePixelColor(id, color)
   }
 
-  colorViewChangeHandler = (id, color) => {
-    this.view.pixelColorChange(id, color)
+  colorViewChangeHandler = (data) => {
+    this.view.pixelColorChange(data)
   }
 
   userCountHandler = (num) => {

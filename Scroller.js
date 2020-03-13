@@ -265,6 +265,16 @@ var Scroller;
 		__decelerationVelocityY: null,
 
 
+		// Change data
+		changeData: function(data) {
+			for (var ind in data) {
+				this.data[ind] = data[ind]
+			}
+			if (this.__callback) {
+				this.__callback(this.__scrollLeft, this.__scrollTop, this.__zoomLevel, this.data)
+			}
+
+		},
 
 		/*
 		---------------------------------------------------------------------------
@@ -1087,7 +1097,7 @@ var Scroller;
 
 						// Push values out
 						if (self.__callback) {
-							self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
+							self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, self.data);
 						}
 
 					}
@@ -1125,7 +1135,7 @@ var Scroller;
 
 				// Push values out
 				if (self.__callback) {
-					self.__callback(left, top, zoom);
+					self.__callback(left, top, zoom, self.data);
 				}
 
 				// Fix max scroll ranges
