@@ -63,10 +63,6 @@ class View {
     this.content = this.getElement('#content')
     this.context = this.content.getContext('2d')
 
-    this.pixelCanvas = this.getElement('#pixelCanvas')
-    this.canvas = this.getElement('#canvas')
-    this.table
-
     this.colorCallback
 
     this.cellWidth = 100
@@ -79,6 +75,7 @@ class View {
     this.zoom
     this.tileWidth
     this.tileHeight
+
     this.left
     this.top
     this.rows
@@ -86,8 +83,6 @@ class View {
 
     this.color
     this.prevColorElement
-
-    // this.data
   }
 
   bindOnTableReady(callback){
@@ -117,10 +112,6 @@ class View {
     this.scroller.setPosition(rect.left + this.container.clientLeft, rect.top + this.container.clientTop);
 
   }
-
-  // dataInit(data) {
-  //   this.data = data
-  // }
 
   initColor() {
     this.color = "222222"
@@ -296,13 +287,10 @@ class View {
       }, false);
 
     } else {
-
-
       document.addEventListener("keydown", function(e) {
 
         var keyCode = e.keyCode
         console.log(keyCode)
-
 
         switch(keyCode) {
           case 69:
@@ -501,19 +489,19 @@ class View {
       currentTop += this.tileHeight;
     }
 
-    // this.onTableReady()
-
   }
 
   paintCell(left, top, width, height, color) {
 
     // var i = row * this.rows + col
-    this.context.strokeRect(left, top, width, height);
+    if (this.zoom >= 0.28) {
+      this.context.strokeRect(left, top, width, height);
+    } 
     this.context.fillStyle = "#" + color
     // this.context.fillStyle = "#" + this.data[i].color
     this.context.fillRect(left, top, width, height)
 		
-		this.context.fillStyle = "black";
+		// this.context.fillStyle = "black";
 		// this.context.font = (14 * this.zoom).toFixed(2) + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
 		
 		// Pretty primitive text positioning :)
@@ -522,79 +510,24 @@ class View {
     
   }
 
-  displayCanvas(pixels) {
-
-    this.table = this.createElement('table');
-    var tr = this.createElement('tr');
-
-    for (var i = 0; i < pixels.length; i++) {
-      if (pixels[i].column == 0) {
-        tr = this.createElement('tr')
-      }
-
-      var td = this.createElement('td')
-      td.id = pixels[i].id
-      td.style.backgroundColor = pixels[i].color
-
-      var span = this.createElement('span')
-      span.style.width = '10px'
-      span.style.height = '10px'
-      td.append(span)
-
-      tr.append(td);
-
-      if (pixels[i].column == 19) {
-        this.table.append(tr)
-      }
-      this.canvas.innerHTML = ''
-      this.canvas.append(this.table)
-    }
-
-    this.onTableReady()
-
-  }
-
   pixelColorChange(data) {
     this.scroller.changeData(data)
-    // var pixel = document.getElementById(id)
-    // pixel.style.backgroundColor = color
-  }
-
-  // bindChangePixelColor(handler) {
-
-  // }
-
-  bindHandlers(handler) {
-    var cells = document.querySelectorAll('td');
-    // console.log(this.table)
-
-    cells.forEach(cell => cell.addEventListener('click', event => {
-      // console.log(event.currentTarget.id)
-
-      handler(event.currentTarget.id, this.colorPicker.value)
-
-    }))   
   }
 
   showUserCount(userNum) {
     console.log("USERS: " + userNum)
     var text = this.getElement('#usersNumText')
     text.textContent = userNum
-    // var text = this.getElement('#userCount')
-    // text.textContent = userNum
   }
 
   createElement(tag, className) {
     const element = document.createElement(tag)
-
     if (className) element.classList.add(className)
-
     return element
   }
 
   getElement(selector) {
     const element = document.querySelector(selector)
-
     return element
   }
 }
@@ -613,10 +546,6 @@ class Controller {
 
     this.model.pixelModelColorChange(this.colorViewChangeHandler.bind(this))
 
-
-    // this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
-    // this.view.bindChangePixelColor(this.handleChangePixelColor)
-
     //Display User Number
     this.model.getUserNumber(this.userCountHandler.bind(this))
 
@@ -624,7 +553,6 @@ class Controller {
 
   tableReadyHandler() {
     this.view.listeners()
-    // this.view.bindHandlers(this.colorChangedHandler)
   }
 
   colorChangeCallback(id, color) {
@@ -653,7 +581,6 @@ class Controller {
   }
 
 }
-
 
 function init() {  
   const app = new Controller(new View(), new Model())
