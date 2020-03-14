@@ -564,14 +564,14 @@ class Controller {
     this.view.bindColorChange(this.colorChangeCallback.bind(this))
     this.model.getPixels()
 
-    this.model.pixelModelColorChange(this.colorViewChangeHandler)
+    this.model.pixelModelColorChange(this.colorViewChangeHandler.bind(this))
 
 
     // this.view.bindOnTableReady(this.tableReadyHandler.bind(this))
     // this.view.bindChangePixelColor(this.handleChangePixelColor)
 
     //Display User Number
-    this.model.getUserNumber(this.userCountHandler)
+    this.model.getUserNumber(this.userCountHandler.bind(this))
 
   }
 
@@ -580,11 +580,11 @@ class Controller {
     // this.view.bindHandlers(this.colorChangedHandler)
   }
 
-  colorChangeCallback = (id, color) => {
+  colorChangeCallback(id, color) {
     this.model.changePixelColor(id, color)
   }
 
-  onCanvasChangedHandler = (pixels) => {
+  onCanvasChangedHandler(pixels) {
     //Canvas Zoom Pan
     this.view.initScroller(pixels)
     this.view.reflow()
@@ -593,15 +593,15 @@ class Controller {
     // this.view.displayCanvas(pixels)
   }
 
-  colorChangedHandler = (id, color) => {
+  colorChangedHandler(id, color) {
     this.model.changePixelColor(id, color)
   }
 
-  colorViewChangeHandler = (data) => {
+  colorViewChangeHandler(data) {
     this.view.pixelColorChange(data)
   }
 
-  userCountHandler = (num) => {
+  userCountHandler(num) {
     this.view.showUserCount(num)
   }
 
