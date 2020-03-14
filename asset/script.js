@@ -149,7 +149,7 @@ class View {
     color3.addEventListener("click", () => {
       this.cleanPrevColor()
       this.makeCurrColor(color3)
-      this.color = "88888"
+      this.color = "888888"
     })
 
     var color4 = document.getElementById("4")
