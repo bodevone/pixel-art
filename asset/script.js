@@ -263,7 +263,7 @@ class View {
 
     if ('ontouchstart' in window) {
 
-      this.container.addEventListener("touchstart", function(e) {
+      this.content.addEventListener("touchstart", function(e) {
         // Don't react if initial down happens on a form element
         if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
           return;
@@ -290,7 +290,6 @@ class View {
       document.addEventListener("keydown", function(e) {
 
         var keyCode = e.keyCode
-        console.log(keyCode)
 
         switch(keyCode) {
           case 69:
@@ -312,7 +311,6 @@ class View {
           case 68:
           case 39:
             //RIght
-            console.log("HERE")
             self.scroller.scrollBy(150, 0, true)
             break
         
@@ -330,8 +328,7 @@ class View {
           }
 
       }, false)
-
-
+      
       var mousedown = false;
       var mousemove = false;
 
@@ -349,7 +346,8 @@ class View {
         mousedown = true;
       }, false);
 
-      document.addEventListener("mousemove", function(e) {
+      this.container.addEventListener("mousemove", function(e) {
+        self.positionShow(e)
 
         if (!mousedown) {
           return;
@@ -365,6 +363,7 @@ class View {
       }, false);
 
       document.addEventListener("mouseup", function(e) {
+
         if (!mousedown) {
           return;
         }
@@ -392,10 +391,25 @@ class View {
       }, false);
 
       this.container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
+        self.positionShow(e)
         self.scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
       }, false);
 
     }
+  }
+
+  positionShow(e) {
+    var x = e.offsetX + self.left
+        var y = e.offsetY + self.top
+
+        var col = (x / self.tileWidth) >> 0
+        var row = (y / self.tileHeight) >> 0
+
+        var rowSpan = document.getElementById("row")
+        var colSpan = document.getElementById("col")
+
+        rowSpan.textContent = row
+        colSpan.textContent = col
   }
 
   canvasRender(left, top, zoom, data) {
@@ -492,22 +506,12 @@ class View {
   }
 
   paintCell(left, top, width, height, color) {
-
-    // var i = row * this.rows + col
-    if (this.zoom >= 0.28) {
+    if (this.zoom >= 0.25) {
       this.context.strokeRect(left, top, width, height);
     } 
     this.context.fillStyle = "#" + color
-    // this.context.fillStyle = "#" + this.data[i].color
     this.context.fillRect(left, top, width, height)
-		
-		// this.context.fillStyle = "black";
-		// this.context.font = (14 * this.zoom).toFixed(2) + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
-		
-		// Pretty primitive text positioning :)
-		// this.context.fillText(row + "," + col, left + (6 * this.zoom), top + (18 * this.zoom));
-    
-    
+		    
   }
 
   pixelColorChange(data) {

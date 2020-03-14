@@ -56,10 +56,10 @@ var Scroller;
 			zooming: true,
 
 			/** Minimum zoom level */
-			minZoom: 0.1,
+			minZoom: 0.05,
 
 			/** Maximum zoom level */
-			maxZoom: 3,
+			maxZoom: 1,
 
 			/** Multiply or decrease scrolling speed **/
 			speedMultiplier: 1,
@@ -195,7 +195,7 @@ var Scroller;
 		__refreshStart: null,
 
 		/** {Number} Zoom level */
-		__zoomLevel: 1,
+		__zoomLevel: 0.27,
 
 		/** {Number} Scroll position on x-axis */
 		__scrollLeft: 0,
