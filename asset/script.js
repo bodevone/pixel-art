@@ -297,6 +297,53 @@ class View {
 
     } else {
 
+
+      document.addEventListener("keydown", function(e) {
+
+        var keyCode = e.keyCode
+        console.log(keyCode)
+
+
+        switch(keyCode) {
+          case 69:
+          case 187:
+            //Zoom In
+            self.scroller.zoomBy(1.2, true)
+            break
+          case 81:
+          case 189:
+            // Zoom out
+            self.scroller.zoomBy(0.8, true)
+            break
+          case 65:
+          case 37:
+            //Left
+            self.scroller.scrollBy(-150, 0, true)
+            break
+
+          case 68:
+          case 39:
+            //RIght
+            console.log("HERE")
+            self.scroller.scrollBy(150, 0, true)
+            break
+        
+          case 87:
+          case 38:
+            //Up
+            self.scroller.scrollBy(0, -150, true)
+            break
+
+          case 83:
+          case 40:
+            //Bottom
+            self.scroller.scrollBy(0, 150, true)
+            break
+          }
+
+      }, false)
+
+
       var mousedown = false;
       var mousemove = false;
 
