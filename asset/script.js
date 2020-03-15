@@ -363,6 +363,7 @@ class View {
       }, false);
 
       document.addEventListener("mouseup", function(e) {
+        self.positionShow(e)
 
         if (!mousedown) {
           return;
@@ -392,6 +393,7 @@ class View {
 
       this.container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
         self.positionShow(e)
+
         self.scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
       }, false);
 
