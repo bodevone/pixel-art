@@ -12,36 +12,27 @@ class Model {
 
   getPixels() {
     this.socket.on('pixels', (data) => {
+      console.log(data)
       this.onPixelsReady(data)
     })
-
-    // fetch(this.url)
-    //   .then(res => res.json())
-    //   .then(data => this.callbackAns(data))
-      
   }
 
   changePixelColor(id, color) {
     console.log(id)
     console.log(color)
-    // color = color.substr(1)
     var data = {}
     data[id] = color
 
     this.socket.emit('change color', data)
 
-    // this._commit
-
   }
 
   pixelModelColorChange(callback) {
-    // this.colorChange()
     console.log("HERE")
     this.socket.on('color changed', (data) => {
       console.log(data)
       callback(data)
     })
-    // this.onPixelColorChangeReady = callback
   }
 
   getUserNumber(callback) {
@@ -402,16 +393,16 @@ class View {
 
   positionShow(e) {
     var x = e.offsetX + self.left
-        var y = e.offsetY + self.top
+    var y = e.offsetY + self.top
 
-        var col = (x / self.tileWidth) >> 0
-        var row = (y / self.tileHeight) >> 0
+    var col = (x / self.tileWidth) >> 0
+    var row = (y / self.tileHeight) >> 0
 
-        var rowSpan = document.getElementById("row")
-        var colSpan = document.getElementById("col")
+    var rowSpan = document.getElementById("row")
+    var colSpan = document.getElementById("col")
 
-        rowSpan.textContent = row
-        colSpan.textContent = col
+    rowSpan.textContent = row
+    colSpan.textContent = col
   }
 
   canvasRender(left, top, zoom, data) {
@@ -423,6 +414,8 @@ class View {
     this.content.height = this.clientHeight
 
     this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
+
+    console.log(data)
 
     this.tilingRender(data)
 
@@ -570,8 +563,6 @@ class Controller {
     this.view.initScroller(pixels)
     this.view.reflow()
     this.view.listeners()
-
-    // this.view.displayCanvas(pixels)
   }
 
   colorChangedHandler(id, color) {

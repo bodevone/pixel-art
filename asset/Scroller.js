@@ -195,7 +195,7 @@ var Scroller;
 		__refreshStart: null,
 
 		/** {Number} Zoom level */
-		__zoomLevel: 0.27,
+		__zoomLevel: 0.3,
 
 		/** {Number} Scroll position on x-axis */
 		__scrollLeft: 0,
