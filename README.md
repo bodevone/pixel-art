@@ -1,8 +1,14 @@
 # Pixel Art
 
-Canvas for drawing pixels written on plain JavaScript using MVC concept
+<img src="https://img.shields.io/badge/License-MIT-blue.svg">
+
+A canvas for drawing pixels in real-time. This project is written in plain JavaScript using MVC design patterns.
 
 ### [Visit the site](https://bodevone.github.io/pixel-art/)
+
+## Features
+* Panning and Zooming of canvas
+* Realtime update
 
 ## Todos
 

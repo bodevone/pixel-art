@@ -12,7 +12,6 @@ class Model {
 
   getPixels() {
     this.socket.on('pixels', (data) => {
-      console.log(data)
       this.onPixelsReady(data)
     })
   }
@@ -261,21 +260,21 @@ class View {
         }
 
         self.scroller.doTouchStart(e.touches, e.timeStamp);
-        e.preventDefault();
+        e.preventDefault()
       }, false);
 
       document.addEventListener("touchmove", function(e) {
 
         self.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
-      }, false);
+      }, false)
 
       document.addEventListener("touchend", function(e) {
         self.scroller.doTouchEnd(e.timeStamp);
-      }, false);
+      }, false)
 
       document.addEventListener("touchcancel", function(e) {
         self.scroller.doTouchEnd(e.timeStamp);
-      }, false);
+      }, false)
 
     } else {
       document.addEventListener("keydown", function(e) {
@@ -414,8 +413,6 @@ class View {
     this.content.height = this.clientHeight
 
     this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
-
-    console.log(data)
 
     this.tilingRender(data)
 
