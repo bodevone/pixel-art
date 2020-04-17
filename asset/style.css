@@ -162,7 +162,7 @@ h2 {
 
 @media only screen and (max-width: 600px) {
     
-    .open {
+    /* .open {
         top: 1em;
     }
 
@@ -172,10 +172,15 @@ h2 {
 
     .position-div {
         top: 0.2em;
+    } */
+
+    #colors {
+        top: 1em;
     }
 
     #container {
-        top: 4.5em;
+        top: 6em;
+        bottom: 4.5em;
     }
 }
 
