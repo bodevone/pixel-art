@@ -1,44 +1,17 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-
 body {
     font-family: 'Roboto';
     text-align: center;
-    /* background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%); */
     overflow: hidden;
 
 }
 
 h1 {
-    font-family: Monoton;
-    font-size: 70px;
+    font-size: 50px;
     margin: 0.2em;
 }
 
 h2 {
     margin: 1em 0 0.25em;
-}
-
-h2:first-of-type {
-    margin-top: 0.5em;
-}
-
-table,
-tr,
-td {
-    border: 1px solid black;
-}
-
-table {
-    border-collapse: collapse;
-    margin: 0 auto;
-}
-
-tr {
-    height: 20px;
-}
-
-td {
-    width: 20px;
 }
 
 
@@ -51,13 +24,53 @@ td {
 	border: 5px solid black;
 	cursor: default;
 	overflow: hidden;
-
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-o-user-select: none;
-	user-select: none;
 }
+
+.main {
+    opacity: 100%;
+}
+
+.main.disabled {
+    opacity: 50%;
+}
+
+.info-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.info-wrapper.disabled {
+    display: none;
+}
+
+.info {
+    display: block;
+    justify-content: center;
+    width: 65%;
+    z-index: 100;
+    background: #fff;
+    border-radius: 5px;
+    border: 2px solid black;
+    padding: 1rem;
+
+}
+
+.info-close {
+    position: relative;
+    float: right;
+}
+
+.info-close:hover {
+    cursor: pointer;
+}
+
+
+/* .info .active {
+    display: none;
+} */
 
 #colors {
     background-color: rgba(0, 0, 0, 0.75);
@@ -85,6 +98,21 @@ td {
     cursor: pointer;
     margin: 0px;
     padding: 0px; 
+}
+
+.open {
+    position: absolute;
+    left: 8em;
+    bottom: 1em;    
+}
+
+.open:hover {
+    cursor: pointer;
+}
+
+.open img {
+    height: 42px;
+    width: auto;
 }
 
 .users-div {
@@ -130,5 +158,24 @@ td {
     border-radius: 21px;
     padding: 0px 1.5em;
     white-space: nowrap;
+}
+
+@media only screen and (max-width: 600px) {
+    
+    .open {
+        top: 1em;
+    }
+
+    .users-div {
+        top: 1em;
+    }
+
+    .position-div {
+        top: 0.2em;
+    }
+
+    #container {
+        top: 4.5em;
+    }
 }
 

@@ -1,6 +1,5 @@
 class Model {
   constructor() {
-    // this.url = "http://localhost:4000"
     this.url = "https://pixel-node-back.herokuapp.com/"
     this.socket = io.connect(this.url)
 
@@ -17,8 +16,6 @@ class Model {
   }
 
   changePixelColor(id, color) {
-    console.log(id)
-    console.log(color)
     var data = {}
     data[id] = color
 
@@ -27,9 +24,7 @@ class Model {
   }
 
   pixelModelColorChange(callback) {
-    console.log("HERE")
     this.socket.on('color changed', (data) => {
-      console.log(data)
       callback(data)
     })
   }
@@ -48,10 +43,14 @@ class Model {
 class View {
   constructor() {
     this.colorPicker = this.getElement('#colorPicker')
+    this.info = this.getElement('.info-wrapper')
+    this.main = this.getElement('.main')
 
     this.container = this.getElement('#container')
     this.content = this.getElement('#content')
     this.context = this.content.getContext('2d')
+
+    this.infoClosed = false
 
     this.colorCallback
 
@@ -83,6 +82,28 @@ class View {
     this.colorCallback = callback
   }
 
+  toggleInfo() {
+    if (this.infoClosed) {
+      this.info.classList.remove('disabled')
+      this.main.classList.add('disabled')
+    } else {
+      this.info.classList.add('disabled')
+      this.main.classList.remove('disabled')
+    }
+    this.infoClosed = !this.infoClosed
+  }
+
+  infoListener() {
+    var close = document.getElementById("close")
+    close.addEventListener("click", () => {
+      this.toggleInfo()
+    })
+    var open = document.getElementById("open")
+    open.addEventListener("click", () => {
+      this.toggleInfo()
+    })
+  }
+
   initScroller(pixels) {
     var rows = pixels.maxRow
     var cols = pixels.maxCol
@@ -105,7 +126,6 @@ class View {
 
   initColor() {
     this.color = "222222"
-    console.log(this.color)
     var color4 = document.getElementById("4")
     this.makeCurrColor(color4)
 
@@ -366,8 +386,6 @@ class View {
           var col = (x / self.tileWidth) >> 0
           var row = (y / self.tileHeight) >> 0
     
-          console.log("Row: "+ row + " Col: " + col)
-    
           //Change color HERE
           const index = row + "_" + col
 
@@ -424,8 +442,6 @@ class View {
     this.tileHeight = this.cellHeight * this.zoom;
     this.tileWidth = this.cellWidth * this.zoom;
 
-    console.log(this.zoom, this.top, this.left)
-    
     // Compute starting rows/columns and support out of range scroll positions
     var startRow = Math.max(Math.floor(this.top / this.tileHeight), 0);
     var startCol = Math.max(Math.floor(this.left / this.tileWidth), 0);
@@ -511,7 +527,6 @@ class View {
   }
 
   showUserCount(userNum) {
-    console.log("USERS: " + userNum)
     var text = this.getElement('#usersNumText')
     text.textContent = userNum
   }
@@ -533,6 +548,8 @@ class Controller {
     this.view = view
     this.model = model
     
+    this.view.infoListener()
+
     this.view.initColor()
     this.view.colorListeners()
     //Display Canvas

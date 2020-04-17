@@ -1,8 +1,11 @@
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Pixel Art Maker!</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Satisfy">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="asset/style.css">
     <link rel="shortcut icon" type="image/png" href="asset/favicon.ico"/>
 
@@ -20,51 +23,71 @@
 
 </head>
 <body>
-
-    <div id="colors">
-        <span id="1" class="color" style="background-color: rgb(255, 255, 255);"></span>
-        <span id="2" class="color" style="background-color: rgb(228, 228, 228);"></span>
-        <span id="3" class="color" style="background-color: rgb(136, 136, 136);"></span>
-        <span id="4" class="color" style="background-color: rgb(34, 34, 34);"></span>
-        <span id="5" class="color" style="background-color: rgb(255, 167, 209);"></span>
-        <span id="6" class="color" style="background-color: rgb(229, 0, 0);"></span>
-        <span id="7" class="color" style="background-color: rgb(229, 149, 0);"></span>
-        <span id="8" class="color" style="background-color: rgb(160, 106, 66);"></span>
-        <span id="9" class="color" style="background-color: rgb(229, 217, 0);"></span>
-        <span id="10" class="color" style="background-color: rgb(148, 224, 68);"></span>
-        <span id="11" class="color" style="background-color: rgb(2, 190, 1);"></span>
-        <span id="12" class="color" style="background-color: rgb(0, 211, 221);"></span>
-        <span id="13" class="color" style="background-color: rgb(0, 131, 199);"></span>
-        <span id="14" class="color" style="background-color: rgb(0, 0, 234);"></span>
-        <span id="15" class="color" style="background-color: rgb(207, 110, 228);"></span>
-        <span id="16" class="color" style="background-color: rgb(130, 0, 128);"></span>
-    </div>
-
-    <div class="users-div">
-        <div class="users">
-            <span id="usersNumText">0</span>
-            <img src="asset/user.png" alt="">
+    <div class="info-wrapper">
+        <div class="info">
+            <div id="close" class="info-close">X</div>
+            <h1 style="width: auto;">Pixel Art</h1>
+            <p>This project was built in order to draw images using single pixels on one big canvas</p> 
+            <p>Pixels can be drawn by selecting the color and placing it in any place on the canvas</p>
+            <p>Canvas can be panned and zoomed with mouse or keyboard<br></p>
+            <h3>Keyboard controls:</h3>
+            <p>Left: A or ←<br>Right: D or →<br>Up: W or ↑<br>Down: S or ↓<br>Zoom in: E or +<br>Zoom out: Q or -</p>
+            <p>Enjoy! 🙌 </p>
+            <img src="asset/favicon.ico">
         </div>
     </div>
 
+    <div class="main disabled">
 
-    <div class="position-div">
-        <div class="position">
-            <p>
-                (
-                <span id="row">0</span>
-                X
-                <span id="col">0</span>
-                )
-            </p>
+        <div id="colors">
+            <span id="1" class="color" style="background-color: rgb(255, 255, 255);"></span>
+            <span id="2" class="color" style="background-color: rgb(228, 228, 228);"></span>
+            <span id="3" class="color" style="background-color: rgb(136, 136, 136);"></span>
+            <span id="4" class="color" style="background-color: rgb(34, 34, 34);"></span>
+            <span id="5" class="color" style="background-color: rgb(255, 167, 209);"></span>
+            <span id="6" class="color" style="background-color: rgb(229, 0, 0);"></span>
+            <span id="7" class="color" style="background-color: rgb(229, 149, 0);"></span>
+            <span id="8" class="color" style="background-color: rgb(160, 106, 66);"></span>
+            <span id="9" class="color" style="background-color: rgb(229, 217, 0);"></span>
+            <span id="10" class="color" style="background-color: rgb(148, 224, 68);"></span>
+            <span id="11" class="color" style="background-color: rgb(2, 190, 1);"></span>
+            <span id="12" class="color" style="background-color: rgb(0, 211, 221);"></span>
+            <span id="13" class="color" style="background-color: rgb(0, 131, 199);"></span>
+            <span id="14" class="color" style="background-color: rgb(0, 0, 234);"></span>
+            <span id="15" class="color" style="background-color: rgb(207, 110, 228);"></span>
+            <span id="16" class="color" style="background-color: rgb(130, 0, 128);"></span>
         </div>
+    
+        <div class="users-div">
+            <div class="users">
+                <span id="usersNumText">0</span>
+                <img src="asset/user.png" alt="">
+            </div>
+        </div>
+
+        <div id="open" class="open">
+            <img src="http://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/512/information-icon.png" alt="">
+        </div>
+    
+    
+        <div class="position-div">
+            <div class="position">
+                <p>
+                    (
+                    <span id="row">0</span>
+                    X
+                    <span id="col">0</span>
+                    )
+                </p>
+            </div>
+        </div>
+    
+    
+        <div id="container">
+            <canvas id="content"></canvas>
+        </div>        
     </div>
 
-
-	<div id="container">
-        <canvas id="content"></canvas>
-        
-    </div>
     
 </body>
 </html>
