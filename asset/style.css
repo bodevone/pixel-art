@@ -184,3 +184,34 @@ h2 {
     }
 }
 
+#spinner {
+    visibility: hidden;
+    width: 70px;
+    height: 70px;
+  
+    border: 7px solid #f3f3f3;
+    border-top:10px solid black;
+    border-radius: 100%;
+  
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right: 0;
+    margin: auto;
+  
+    animation: spin 1s infinite linear;
+}
+  
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(360deg);
+    }
+}
+
+#spinner.show {
+    visibility: visible;
+}
+

@@ -9,8 +9,10 @@ class Model {
     this.getPixels()
   }
 
-  getPixels() {
+  getPixels(callback1, callback2) {
+    callback1()
     this.socket.on('pixels', (data) => {
+      callback2()
       this.onPixelsReady(data)
     })
   }
@@ -49,6 +51,7 @@ class View {
     this.container = this.getElement('#container')
     this.content = this.getElement('#content')
     this.context = this.content.getContext('2d')
+    this.spinner = this.getElement('#spinner')
 
     this.infoClosed = false
 
@@ -80,6 +83,17 @@ class View {
 
   bindColorChange(callback) {
     this.colorCallback = callback
+  }
+
+  showSpinner() {
+    this.spinner.className = "show";
+    setTimeout(() => {
+      this.spinner.className = this.spinner.className.replace("show", "");
+    }, 5000);
+  }
+
+  hideSpinner() {
+    this.spinner.className = this.spinner.className.replace("show", "");
   }
 
   toggleInfo() {
@@ -555,7 +569,7 @@ class Controller {
     //Display Canvas
     this.model.bindOnPixelsReady(this.onCanvasChangedHandler.bind(this))
     this.view.bindColorChange(this.colorChangeCallback.bind(this))
-    this.model.getPixels()
+    this.model.getPixels(this.loadingStartHandler.bind(this), this.loadingEndHandler.bind(this))
 
     this.model.pixelModelColorChange(this.colorViewChangeHandler.bind(this))
 
@@ -589,6 +603,14 @@ class Controller {
 
   userCountHandler(num) {
     this.view.showUserCount(num)
+  }
+
+  loadingStartHandler() {
+    this.view.showSpinner()
+  }
+
+  loadingEndHandler() {
+    this.view.hideSpinner()
   }
 
 }
