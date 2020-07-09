@@ -6,17 +6,12 @@ A canvas for drawing pixels in real-time. This project is written in plain JavaS
 
 ### [Visit the site](https://bodevone.github.io/pixel-art/)
 
+![](docs/example.png "example")
+
 ## Features
 * Panning and Zooming of canvas
 * Realtime update
 
-## Todos
-
-- [x] MVC
-- [x] Socket.io Client
-- [x] Pan and Zoom canvas
-- [x] Number of users
-- [ ] Mobile optimization
 
 ## Used technologies
 * [Socket.io](https://github.com/socketio/socket.io)
