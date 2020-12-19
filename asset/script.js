@@ -27,7 +27,6 @@ class Model {
 
   pixelModelColorChange(callback) {
     this.socket.on('color changed', (data) => {
-      console.log(data)
       callback(data)
     })
   }
