@@ -1,6 +1,6 @@
 class Model {
   constructor() {
-    this.url = "https://pixel-node-back.herokuapp.com/"
+    this.url = "https://pixel-art-back.herokuapp.com/"
     this.socket = io.connect(this.url)
   }
 
