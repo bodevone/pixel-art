@@ -2,7 +2,6 @@ class Model {
   constructor() {
     this.url = "https://pixel-node-back.herokuapp.com/"
     this.socket = io.connect(this.url)
-
   }
 
   _commit() {
@@ -18,15 +17,17 @@ class Model {
   }
 
   changePixelColor(id, color) {
-    var data = {}
-    data[id] = color
-
+    var data = {
+      'id': id,
+      'color': color
+    }
     this.socket.emit('change color', data)
 
   }
 
   pixelModelColorChange(callback) {
     this.socket.on('color changed', (data) => {
+      console.log(data)
       callback(data)
     })
   }
@@ -464,7 +465,6 @@ class View {
     var maxRows = (this.contentHeight * this.zoom) / this.tileHeight;
     var maxCols = (this.contentWidth * this.zoom) / this.tileWidth;
 
-
     this.rows = maxRows
     this.cols = maxCols
     // Compute initial render offsets
@@ -476,7 +476,6 @@ class View {
     //    dimensions by the scroll amount.
     var startTop = this.top >= 0 ? -this.top % this.tileHeight : -this.top;
     var startLeft = this.left >= 0 ? -this.left % this.tileWidth : -this.left;
-
 
     // Compute number of rows to render
     var rows = Math.floor(this.clientHeight / this.tileHeight);
