@@ -6,8 +6,6 @@ services:
     build: ./front
     ports:
       - "8000:80"
-    environment:
-      WS_URL: ws://0.0.0.0:8080
 
   back:
     container_name: back

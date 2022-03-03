@@ -2,8 +2,6 @@
 
 A canvas for drawing pixels in real-time
 
-### [Visit the site](https://bodevone.github.io/pixel-art/)
-
 ![](docs/example.png "example")
 
 ## Features
@@ -18,3 +16,9 @@ A canvas for drawing pixels in real-time
 ## Inspired by
 * [place](https://www.reddit.com/r/place/)
 * [PixelCanvas](https://pixelcanvas.io/)
+
+To run this project locally change `url` in `front/static/script.js` to `ws://0.0.0.0:8080` and run
+
+```
+docker-compose up
+```
