@@ -37,5 +37,12 @@ class Canvas:
         await self.broadcast(data={"action": "disconnect", "user_count": user_count})
 
     async def broadcast(self, data: Dict) -> None:
-        for ws in self.app["connections"].values():
-            await ws.send_json(data)
+        closed_users = []
+        for user_id, ws in self.app["connections"].items():
+            try:
+                await ws.send_json(data)
+            except ConnectionResetError:
+                closed_users.append(user_id)
+        for user_id in closed_users:
+            del self.app["connections"][user_id]
+
