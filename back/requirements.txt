@@ -1,1 +1,2 @@
 aiohttp==3.8.1
+gunicorn==20.1.0
