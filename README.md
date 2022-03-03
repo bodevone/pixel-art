@@ -1,8 +1,6 @@
 # Pixel Art
 
-<img src="https://img.shields.io/badge/License-MIT-blue.svg">
-
-A canvas for drawing pixels in real-time. This project is written in plain JavaScript using MVC design patterns.
+A canvas for drawing pixels in real-time
 
 ### [Visit the site](https://bodevone.github.io/pixel-art/)
 
@@ -14,7 +12,7 @@ A canvas for drawing pixels in real-time. This project is written in plain JavaS
 
 
 ## Used technologies
-* [Socket.io](https://github.com/socketio/socket.io)
+* [Aiohttp](https://github.com/aio-libs/aiohttp)
 * [Scroller](https://github.com/pbakaus/scroller)
 
 ## Inspired by

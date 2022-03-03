@@ -4,44 +4,21 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Pixel Art Maker!</title>
+    <title>Pixel Art</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="asset/style.css">
     <link rel="shortcut icon" type="image/png" href="asset/favicon.ico"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
-    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+    </script>
 
     <script src="asset/script.js"></script>
     <script src="asset/Scroller.js"></script>
     <script src="asset/Animate.js"></script>
-
-
-
-
 </head>
 <body>
-    <div class="info-wrapper">
-        <div class="info">
-            <div id="close" class="info-close">X</div>
-            <h1 style="width: auto;">Pixel Art</h1>
-            <p>This project was built in order to draw images using single pixels on one big canvas</p> 
-            <p>Pixels can be drawn by selecting the color and placing it in any place on the canvas</p>
-            <p>Canvas can be panned and zoomed with mouse or keyboard<br></p>
-            <h3>Keyboard controls:</h3>
-            <p>Left: A or ←<br>Right: D or →<br>Up: W or ↑<br>Down: S or ↓<br>Zoom in: E or +<br>Zoom out: Q or -</p>
-            <p>Enjoy! 🙌 </p>
-            <p><img src="asset/favicon.ico"></p>
-            <p><a href="https://github.com/bodevone/pixel-art">Source code <img style="width: 20px; margin-left: auto; margin-right: auto; display: block;" src="asset/github.png"></a></p>
-            
-            
-        </div>
-    </div>
-
-    <div class="main disabled">
-
+    <div class="main">
         <div id="colors">
             <span id="1" class="color" style="background-color: rgb(255, 255, 255);"></span>
             <span id="2" class="color" style="background-color: rgb(228, 228, 228);"></span>
@@ -60,19 +37,11 @@
             <span id="15" class="color" style="background-color: rgb(207, 110, 228);"></span>
             <span id="16" class="color" style="background-color: rgb(130, 0, 128);"></span>
         </div>
-    
+
         <div class="users-div">
-            <div class="users">
-                <span id="usersNumText">0</span>
-                <img src="asset/user.png" alt="User png">
-            </div>
+            <div class="users"></div>
         </div>
 
-        <div id="open" class="open">
-            <img src="asset/info.png" alt="Info png">
-        </div>
-    
-    
         <div class="position-div">
             <div class="position">
                 <p>
@@ -84,14 +53,11 @@
                 </p>
             </div>
         </div>
-    
-    
-        <div id="container">
-            <div id="spinner"></div> 
-            <canvas id="content"></canvas>
-        </div>        
-    </div>
 
-    
+        <div id="container">
+            <div id="spinner"></div>
+            <canvas id="content"></canvas>
+        </div>
+    </div>
 </body>
 </html>
