@@ -1,6 +1,6 @@
 class Model {
   constructor() {
-    this.url = "wss://pixelart-back.herokuapp.com"
+    this.url = "wss://pixel-art-ws03.onrender.com/"
     this.ws = new WebSocket(this.url)
     this.userId
     this.name
