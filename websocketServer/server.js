@@ -6,6 +6,8 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+var canvas = {"maxX": 200, "maxY": 200};
+
 function broadcast(data) {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -14,7 +16,9 @@ function broadcast(data) {
   });
 }
 
-var canvas = {"maxX": 200, "maxY": 200};
+app.get("/", (req, res) => {
+  res.send('Hello World!');
+})
 
 wss.on('connection', (ws) => {
 
