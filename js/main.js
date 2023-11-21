@@ -1,6 +1,6 @@
 class Model {
   constructor() {
-    this.url = "ws://localhost:3000"
+    this.url = "wss://pixel-art-ws-server-bodevone.koyeb.app/"
     this.ws = new WebSocket(this.url)
     this.userId
     this.name
