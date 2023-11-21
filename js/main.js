@@ -1,6 +1,6 @@
 class Model {
   constructor() {
-    this.url = "wss://pixel-art-websocket-server.vercel.app"
+    this.url = "ws://localhost:3000"
     this.ws = new WebSocket(this.url)
     this.userId
     this.name
