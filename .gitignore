@@ -1,5 +1,7 @@
 .DS_Store
 env
 venv
+.env
 __pycache__
 .idea
+node_modules

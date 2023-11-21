@@ -1,11 +1,10 @@
 class Model {
   constructor() {
-    this.url = "wss://pixel-art-ws03.onrender.com/"
+    this.url = "ws://localhost:3000"
     this.ws = new WebSocket(this.url)
     this.userId
     this.name
   }
-
   _commit() {
     this.getPixels()
   }
@@ -21,38 +20,35 @@ class Model {
       switch(data.action) {
         case "connect":
           cbEndLoad()
-          this.userId = data.user_id
-          cbUserChange(data.user_count)
+          cbUserChange(data.userCount)
           this.onPixelsReady(data.canvas)
           break
         case "disconnect":
-          cbUserChange(data.user_count)
+          cbUserChange(data.userCount)
           break
         case "join":
-          cbUserChange(data.user_count)
+          cbUserChange(data.userCount)
           break
-        case "change_color":
+        case "changeColor":
           cbColorChange(data)
       }
     }
     this.ws.onclose = () => {
       var data = JSON.stringify({
         "action": "disconnect",
-        "user_id": this.userId
       })
       this.ws.send(data)
     }
   }
 
-  changePixelColor(pos_x, pos_y, color) {
+  changePixelColor(posX, posY, color) {
     var data = JSON.stringify({
-      "action": "change_color",
-      "pos_x": pos_x,
-      "pos_y": pos_y,
+      "action": "changeColor",
+      "posX": posX,
+      "posY": posY,
       "color": color
     })
     this.ws.send(data)
-
   }
 
   bindOnPixelsReady(callback) {
@@ -119,14 +115,14 @@ class View {
   }
 
   initScroller(canvas) {
-    var rows = canvas.dimension_x
-    var cols = canvas.dimension_y
+    var rows = canvas.maxX
+    var cols = canvas.maxY
 
     this.contentHeight = this.cellHeight * rows
     this.contentWidth = this.cellWidth * cols
 
-    delete canvas.dimension_x
-    delete canvas.dimension_y
+    delete canvas.dimensionX
+    delete canvas.dimensionY
 
     this.scroller = new Scroller(this.canvasRender.bind(this), {
       zooming: true,
@@ -139,17 +135,17 @@ class View {
 
   initColor() {
     this.color = this.defaultColor
-    var color_elem = document.getElementById(this.defaultColorId)
-    this.makeCurrColor(color_elem)
+    const colorElem = document.getElementById(this.defaultColorId)
+    this.makeCurrColor(colorElem)
   }
 
   colorListeners() {
     for (let i=1; i<=this.colors.length; i++) {
       (() => {
-        var color_elem = document.getElementById(i)
-        color_elem.addEventListener("click", () => {
+        const colorElem = document.getElementById(i)
+        colorElem.addEventListener("click", () => {
           this.cleanPrevColor()
-          this.makeCurrColor(color_elem)
+          this.makeCurrColor(colorElem)
           this.color = this.colors[i-1]
         })
       })()
@@ -467,8 +463,8 @@ class Controller {
     this.view.listeners()
   }
 
-  colorChangeHandler(pos_x, pos_y, color) {
-    this.model.changePixelColor(pos_x, pos_y, color)
+  colorChangeHandler(posX, posY, color) {
+    this.model.changePixelColor(posX, posY, color)
   }
 
   onCanvasChangedHandler(pixels) {

@@ -6,11 +6,9 @@ A canvas for drawing pixels in real-time
 
 ## Features
 * Panning and Zooming of canvas
-* Realtime update
-
+* Realtime update using websockets
 
 ## Used technologies
-* [Aiohttp](https://github.com/aio-libs/aiohttp)
 * [Scroller](https://github.com/pbakaus/scroller)
 
 ## Inspired by
