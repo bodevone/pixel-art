@@ -121,8 +121,8 @@ class View {
     this.contentHeight = this.cellHeight * rows
     this.contentWidth = this.cellWidth * cols
 
-    delete canvas.dimensionX
-    delete canvas.dimensionY
+    delete canvas.maxX
+    delete canvas.maxY
 
     this.scroller = new Scroller(this.canvasRender.bind(this), {
       zooming: true,
@@ -382,7 +382,6 @@ class View {
     rows = Math.min(rows, maxRows - startRow);
     cols = Math.min(cols, maxCols - startCol);
 
-
     // Initialize looping variables
     var currentTop = startTop;
     var currentLeft = startLeft;
@@ -390,7 +389,7 @@ class View {
     // Render new squares
     for (var row = startRow; row < (rows + startRow); row++) {
       for (var col = startCol; col < (cols + startCol); col++) {
-        const index = row + ":" + col
+        const index = row + "-" + col
         var color = "fff"
         if (data.hasOwnProperty(index)) {
           color = data[index]

@@ -1,12 +1,15 @@
-const WebSocket = require('ws');
-const http = require('http');
-const express = require('express');
+const WebSocket = require("ws");
+const http = require("http");
+const express = require("express");
+const { Redis } = require("ioredis");
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-var canvas = {"maxX": 200, "maxY": 200};
+var canvasDimensions = {"maxX": 200, "maxY": 200};
+
+const redis = new Redis(process.env.REDIS_URL);
 
 function broadcast(data) {
   wss.clients.forEach((client) => {
@@ -22,12 +25,25 @@ app.get("/", (req, res) => {
 
 wss.on('connection', (ws) => {
 
-  ws.on('message', (message) => {
+  ws.on('message', async (message) => {
 
     message = JSON.parse(message)
     const userCount = wss.clients.size;
 
     if (message.action === "connect") {
+
+      const canvas = await new Promise((resolve, reject) => {
+        redis.hgetall("canvas", (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+
+      canvas["maxX"] = canvasDimensions["maxX"];
+      canvas["maxY"] = canvasDimensions["maxY"];
 
       ws.send(JSON.stringify({"action": "connect", "userCount": userCount, "canvas": canvas}));
 
@@ -39,7 +55,8 @@ wss.on('connection', (ws) => {
       const posY = message.posY;
       const color = message.color;
       const key = posX + "-" + posY;
-      canvas[key] = color;
+
+      await redis.hset("canvas", key, color);
 
       broadcast(JSON.stringify({"action": "changeColor", "color": color, "posX": posX, "posY": posY}));
 
@@ -53,6 +70,7 @@ wss.on('connection', (ws) => {
   ws.on("close", () => {
     broadcast(JSON.stringify({"action": "disconnect", "userCount": wss.clients.size}));
   });
+  
 });
 
 const PORT = process.env.PORT || 3000;

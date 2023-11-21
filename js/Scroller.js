@@ -267,7 +267,7 @@ var Scroller;
 
 		// Change data
 		changeData: function(data) {
-			ind = data.posX + ":" + data.posY
+			ind = data.posX + "-" + data.posY
 			this.data[ind] = data.color
 			this.__callback(this.__scrollLeft, this.__scrollTop, this.__zoomLevel, this.data)
 		},
