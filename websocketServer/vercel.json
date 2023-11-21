@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "name": "pixel-art-websocket-server",
+    "builds": [
+      {
+        "src": "server.js",
+        "use": "@now/node-server"
+      }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "server.js" }
+    ]
+  }
