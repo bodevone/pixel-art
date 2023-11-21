@@ -1,5 +1,5 @@
 {
-  "name": "pixel-art-websocket-server",
+  "name": "pixel-art-ws-server",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
