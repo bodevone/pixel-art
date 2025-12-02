@@ -1,6 +1,6 @@
 class Model {
   constructor() {
-    this.url = "wss://pixel-art-ws-server-bodevone.koyeb.app/"
+    this.url = "wss://driving-crawdad-bodevone-bfc1f942.koyeb.app/"
     this.ws = new WebSocket(this.url)
     this.userId
     this.name
@@ -12,12 +12,12 @@ class Model {
   wsConnect(cbStartLoad, cbEndLoad, cbColorChange, cbUserChange) {
     cbStartLoad()
     this.ws.onopen = () => {
-      var data = JSON.stringify({"action": "connect"})
+      var data = JSON.stringify({ "action": "connect" })
       this.ws.send(data)
     }
     this.ws.onmessage = (e) => {
       var data = JSON.parse(e.data)
-      switch(data.action) {
+      switch (data.action) {
         case "connect":
           cbEndLoad()
           cbUserChange(data.userCount)
@@ -98,7 +98,7 @@ class View {
     this.prevColorElement
   }
 
-  bindOnTableReady(callback){
+  bindOnTableReady(callback) {
     this.onTableReady = callback
   }
 
@@ -140,13 +140,13 @@ class View {
   }
 
   colorListeners() {
-    for (let i=1; i<=this.colors.length; i++) {
+    for (let i = 1; i <= this.colors.length; i++) {
       (() => {
         const colorElem = document.getElementById(i)
         colorElem.addEventListener("click", () => {
           this.cleanPrevColor()
           this.makeCurrColor(colorElem)
-          this.color = this.colors[i-1]
+          this.color = this.colors[i - 1]
         })
       })()
     }
@@ -156,7 +156,7 @@ class View {
     colorElement.style.zIndex = "2"
     colorElement.style.outline = "2px solid #fff"
     colorElement.style.boxShadow = "0 0 5px 2px rgba(0, 0, 0, 0.25)"
-    
+
     this.prevColorElement = colorElement
   }
 
@@ -201,8 +201,8 @@ class View {
       }, false)
 
     } else {
-      document.addEventListener("keydown", function(e) {
-        switch(e.key) {
+      document.addEventListener("keydown", function (e) {
+        switch (e.key) {
           case "=":
             //Zoom In
             self.scroller.zoomBy(1.2, true)
@@ -231,19 +231,19 @@ class View {
             //Bottom
             self.scroller.scrollBy(0, 150, true)
             break
-          }
+        }
 
       }, false)
-      
+
       var mousedown = false;
       var mousemove = false;
 
-      this.container.addEventListener("mousedown", function(e) {
+      this.container.addEventListener("mousedown", function (e) {
 
         if (e.target.tagName.match(/input|textarea|select/i)) {
           return;
         }
-        
+
         self.scroller.doTouchStart([{
           pageX: e.pageX,
           pageY: e.pageY
@@ -252,7 +252,7 @@ class View {
         mousedown = true;
       }, false);
 
-      this.container.addEventListener("mousemove", function(e) {
+      this.container.addEventListener("mousemove", function (e) {
         self.positionShow(e)
 
         if (!mousedown) {
@@ -268,7 +268,7 @@ class View {
         mousemove = true;
       }, false);
 
-      document.addEventListener("mouseup", function(e) {
+      document.addEventListener("mouseup", function (e) {
         self.positionShow(e)
 
         if (!mousedown) {
@@ -281,7 +281,7 @@ class View {
 
           var col = (x / self.tileWidth) >> 0
           var row = (y / self.tileHeight) >> 0
-    
+
           //Change color
           self.colorCallback(row, col, self.color)
 
@@ -293,7 +293,7 @@ class View {
         mousemove = false;
       }, false);
 
-      this.container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
+      this.container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" : "mousewheel", function (e) {
         self.positionShow(e)
 
         self.scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
@@ -407,10 +407,10 @@ class View {
   paintCell(left, top, width, height, color) {
     if (this.zoom >= 0.25) {
       this.context.strokeRect(left, top, width, height);
-    } 
+    }
     this.context.fillStyle = "#" + color
     this.context.fillRect(left, top, width, height)
-		    
+
   }
 
   pixelColorChange(data) {
@@ -444,7 +444,7 @@ class Controller {
   constructor(view, model) {
     this.view = view
     this.model = model
-    
+
     this.view.initColor()
     this.view.colorListeners()
     this.model.bindOnPixelsReady(this.onCanvasChangedHandler.bind(this))
@@ -490,7 +490,7 @@ class Controller {
 
 }
 
-function init() {  
+function init() {
   const app = new Controller(new View(), new Model())
 }
 
